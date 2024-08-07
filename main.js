@@ -148,3 +148,62 @@ function addBtns() {
 
 
 
+let obj = {}
+const handleChange = (event) => {
+    const {name,value} = event.target
+    obj[name] = value
+    console.log(obj);
+
+}
+
+const addUser = document.getElementById("addUser")
+const clearAll = document.getElementById("clearAll")
+let orderedName = []
+addUser.addEventListener("click", () => {
+    const userInfo = document.getElementById("userInfo")
+    orderedName.push({...obj})
+
+    
+    let tr = ""
+    orderedName.map((item, index)=>{
+        tr += `<tr>
+                    <td>${index + 1}</td>
+                    <td>${item.firstName}</td>
+                    <td>${item.lastName}</td>
+                    <td>${item.age}</td>
+                    <td>${item.email}</td>
+                    <td><button class="btn btn-danger" onclick="deleteUser(${index})">del</button></td>
+
+            </tr>`
+
+            userInfo.innerHTML = tr
+    })
+})
+
+function deleteUser(index) {
+    orderedName.splice(index,1)
+
+    let tr = ""
+    orderedName.map((item, index)=>{
+        tr += `<tr>
+                    <td>${index + 1}</td>
+                    <td>${item.firstName}</td>
+                    <td>${item.lastName}</td>
+                    <td>${item.age}</td>
+                    <td>${item.email}</td>
+                    <td><button class="btn btn-danger" onclick="deleteUser(${index})">del</button></td>
+
+            </tr>`
+
+            userInfo.innerHTML = tr
+    })
+
+}
+
+
+clearAll.addEventListener("click", ()=> {
+    userInfo.innerHTML = ""
+   
+})
+
+

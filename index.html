@@ -44,16 +44,39 @@
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card mt-5 mb-5 col-md-12">
+                    <div class="card-head">
+                        <div class="col-md-6 d-flex justify-content-center p-3">
+                            <input class="form-control"  placeholder="Search"></input>
+                        </div>
+
+                        <div class="p-3 d-flex flex-column gap-3">
+                           <div class="d-flex gap-2">
+                            <input class="form-control" type="text" name="firstName" id="" placeholder="Enter your first name" onkeyup="handleChange(event)">
+                            <input class="form-control" type="text" name="lastName" id="" placeholder="Enter your last name" onkeyup="handleChange(event)">
+                           </div>
+                           <div class="d-flex gap-2">
+                            <input class="form-control" type="number" name="age" id="" placeholder="Enter your age" onkeyup="handleChange(event)">
+                            <input class="form-control" type="email" name="email" id="" placeholder="Enter your email" onkeyup="handleChange(event)">
+                           </div>
+                           <button id="addUser" class="btn btn-primary">Add User</button>
+                           <button id="clearAll" class="btn btn-danger" >Clear</button>
+                        </div>
+                    </div>
                     <div class="card-body">
-                        <table>
+                        <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <td>First Name</td>
+                                    <th>№</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Age</th>
+                                    <th>Mail</th>
+                                    <th>Del</th>
                                 </tr>
                             </thead>
 
-                            <tbody>
+                            <tbody id="userInfo">
 
                             </tbody>
                         </table>
