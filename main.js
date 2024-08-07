@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", (event)=> {
 function addTask() {
     let inputValue = input.value.trim()
     if (inputValue !== "") {
-        arr.push({name: inputValue, disabled: false, editing: false})
+        arr.push({name: inputValue, disabled: false})
         input.value = ""
         updateList()
         saveToLocalStorage()
@@ -32,53 +32,39 @@ function addTask() {
      
 }
 
-// btn.addEventListener("click", () => {
-  
-// })
-
 function updateList() {
     orderList.innerHTML = ""
     arr.forEach((item, index) => {
         let li = document.createElement("li")
-        // li.textContent = item.name
-        if (item.editing) { // YANGI KOD
-            li.innerHTML = ` 
-                <div class="d-flex gap-1 align-items-center">
-                    <input type="text" class="edit-input" value="${item.name}"> 
-                    <button class="save-btn btn btn-success my-2">Save</button>
-                </div>`
-            li.querySelector(".save-btn").addEventListener("click", function() {
-                saveEdit(index, li.querySelector(".edit-input").value) // YANGI KOD
-            })
-        }else {
-            li.innerHTML = `<div class="d-flex gap-1 align-items-center">
-            <input type="checkbox" class="todo-checkbox "  ${item.disabled ? "checked" : ""}></input>
-            <span class="${item.disabled ? "disabled" : ""}">${item.name}</span>
-             <button class="edit-btn btn btn-primary my-1 mx-5">Edit</button>
-            </div>`
-            li.querySelector(".edit-btn").addEventListener("click", function() { // YANGI KOD
-                editTask(index) // YANGI KOD
-            })
-            li.querySelector(".todo-checkbox").addEventListener("change", function() {
-                toggleTask(index)
-            } )
+    
+       li.innerHTML = `<div class="d-flex gap-1 align-items-center justify-content-between">
+       <div>
+            <input type="checkbox" class="todo-checkbox w-2"  ${item.disabled ? "checked" : ""}></input>
+            <span id="todo-${index}" onclick="editFunc(${index})" class="${item.disabled ? "disabled" : "" } fs-5" >${item.name}</span>
+       </div>
+        <btn id="delItem-${index}" onclick="delIndex(${index})" class="btn btn-warning my-2 mx-2">del</btn>
+       </div>`
+       li.querySelector(".todo-checkbox").addEventListener("change", function() {
+            toggleTask(index)
 
-        }    
-        orderList.appendChild(li)
+       } )
+    orderList.appendChild(li)
     });
     count.innerText = arr.length
+
 }
+
+
 
 function saveToLocalStorage() {
-    localStorage.setItem("tasks", JSON.stringify(arr))
+localStorage.setItem("tasks", JSON.stringify(arr))
 }
-
-
 function delFunc() {
     arr = []
     saveToLocalStorage()
     updateList()
 }
+
 
 
 function toggleTask(index) {
@@ -87,15 +73,78 @@ function toggleTask(index) {
     updateList()
 }
 
-function editTask(index) { // YANGI KOD
-    arr[index].editing = true // YANGI KOD
-    updateList() // YANGI KOD
+function editFunc(index) {
+    let input__el = document.getElementById(`todo-${index}`)
+    let new__inp =  document.createElement("input")
+    input__el.replaceWith(new__inp)
+    new__inp.focus()
+    new__inp.value = arr[index].name
+
+    new__inp.addEventListener("blur", function () {
+        let update__text = new__inp.value
+        if (update__text) {
+            arr[index].name = update__text
+            saveToLocalStorage()
+        }
+        updateList()
+    })
+
+    new__inp.addEventListener("keydown", function (event) {
+        if (event.key == "Enter") {
+            let update__text = new__inp.value
+            if (update__text) {
+                arr[index].name = update__text
+                saveToLocalStorage()
+            }
+            updateList()
+            
+        }
+    })
+
+
+}
+
+function delIndex(index) {
+    arr.splice(index,1)
+    saveToLocalStorage()
+    updateList()
 }
 
 
-function saveEdit(index, newValue) { // YANGI KOD
-    arr[index].name = newValue // YANGI KOD
-    arr[index].editing = false // YANGI KOD
-    saveToLocalStorage() // YANGI KOD
-    updateList() // YANGI KOD
+const addCounter = document.getElementById("addCounter")
+const showBtns = document.getElementById("showBtns")
+const card__body = document.getElementById("card__body")
+
+document.addEventListener("DOMContentLoaded", (event) => {
+    addCounter.addEventListener("click", addBtns)
+})
+
+function addBtns() {
+    let div = document.createElement("div")
+    div.innerHTML = ` 
+    <div class="d-flex gap-2 align-items-center justify-content-center">
+        <button id="btnPlus"  class="btnPlus btn btn-secondary fs-3 mb-3">+</button>
+        <p id="num" class="num">0</p>
+        <button id="btnMinus" class="btnMinus btn btn-secondary fs-3 mb-3 ">−</button>
+    </div>`
+    card__body.appendChild(div)
+
+
+    const btnPlus = div.querySelector(".btnPlus")
+    const btnMinus = div.querySelector(".btnMinus")
+    const num = div.querySelector(".num")
+
+    
+
+    btnPlus.addEventListener("click", ()=> {
+        num.innerText = parseInt(num.innerText) + 1
+    })
+
+    btnMinus.addEventListener("click", () => {
+        num.innerText = parseInt(num.innerText) - 1
+    })
+
 }
+
+
+
